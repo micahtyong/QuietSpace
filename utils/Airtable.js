@@ -24,7 +24,7 @@ export const mourn = (newAmount) => {
           fields: {
             Name: "BLM",
             Currently: newAmount,
-            Total: newAmount,
+            Total: newAmount + 1,
           },
         },
       ],
