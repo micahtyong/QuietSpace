@@ -3,17 +3,19 @@ var base = new Airtable({ apiKey: "keyQCsxwtKfVXBGQ7" }).base(
   "appd8lkyTKLsh6D99"
 );
 
-const fetchCurrent = () => {
-  base("BLM").find("recWVCnlxDRFfUxMs", function (err, record) {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log("Retrieved", record);
+export const fetchCurrent = () => {
+  return new Promise((resolve, reject) => {
+    base("BLM").find("recWVCnlxDRFfUxMs", function (err, record) {
+      if (err) {
+        console.error(err);
+        reject(err);
+      }
+      resolve(record["fields"]["Total"]);
+    });
   });
 };
 
-const mourn = () => {
+export const mourn = () => {
   base("BLM").update(
     [
       {
