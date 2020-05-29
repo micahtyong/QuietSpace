@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Animated, TouchableWithoutFeedback, Easing } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-const { Value, timing } = Animated
+const { Value, timing, sequence, loop } = Animated
 
 export default class App extends React.Component {
   constructor(props) {
@@ -10,16 +10,25 @@ export default class App extends React.Component {
 
     this.state = {
       glowAnim: new Value(0),
+      breathAnim: new Value(0),
     };
   }
 
   handlePress = () => {
-    const { glowAnim } = this.state;
+    const { glowAnim, breathAnim } = this.state;
     timing(glowAnim, {
       toValue: 1,
       duration: 5000,
       easing: Easing.elastic(1)
-    }).start()
+    }).start((res) => {
+      if (res.finished) {
+        this.breathOut();
+      }
+    })
+  }
+
+  breathOut = () => {
+    console.log("breathout")
   }
 
   handleRelease = () => {
@@ -32,7 +41,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { glowAnim } = this.state;
+    const { glowAnim, breathAnim } = this.state;
     return (
       <View style={styles.container}>
         <Animated.View style={{ ...styles.topContainer, opacity: glowAnim }}>
@@ -55,7 +64,11 @@ export default class App extends React.Component {
               opacity: glowAnim.interpolate({
                 inputRange: [0, 1],
                 outputRange: [0.4, 1],
-              })
+              }),
+              marginBottom: glowAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, hp(5)],
+              }),
             }}>
             </Animated.View>
           </TouchableWithoutFeedback>
