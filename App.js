@@ -7,7 +7,8 @@ import {
   TouchableWithoutFeedback,
   Easing,
 } from "react-native";
-import { fetchCurrent } from "./utils/Airtable";
+import { fetchCurrent, mourn } from "./utils/Airtable";
+import { mourningStep } from "./utils/Enumerations";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -25,19 +26,52 @@ export default class App extends React.Component {
     };
   }
 
-  componentDidMount() {
-    fetchCurrent()
-      .then((response) => {
-        if (response !== null) {
-          console.log("Response issss", response);
-          this.setState({ currentActives: response });
-        }
-      })
-      .catch((err) => console.log(err));
-  }
+  componentDidMount = async () => {
+    await this.fetchAndSetCurrent();
+  };
 
-  handlePress = () => {
+  fetchAndSetCurrent = async (isMourning = mourningStep.neutral) => {
+    switch (isMourning) {
+      case mourningStep.neutral:
+        fetchCurrent()
+          .then((response) => {
+            if (response !== null) {
+              console.log("Response issss", response);
+              this.setState({ currentActives: response });
+            }
+          })
+          .catch((err) => console.log(err));
+        break;
+      case mourningStep.mourning:
+        fetchCurrent()
+          .then((response) => {
+            if (response !== null) {
+              mourn(response + 1).then((response) => {
+                console.log("Hii resposs", response);
+                this.setState({ currentActives: response });
+              });
+            }
+          })
+          .catch((err) => console.log(err));
+        break;
+      default:
+        fetchCurrent()
+          .then((response) => {
+            if (response !== null) {
+              mourn(response - 1).then((response) => {
+                console.log("Hii resposs", response);
+                this.setState({ currentActives: response });
+              });
+            }
+          })
+          .catch((err) => console.log(err));
+    }
+  };
+
+  handlePress = async () => {
+    await this.fetchAndSetCurrent(mourningStep.mourning);
     const { glowAnim } = this.state;
+
     timing(glowAnim, {
       toValue: 1,
       duration: 5000,
@@ -45,7 +79,8 @@ export default class App extends React.Component {
     }).start();
   };
 
-  handleRelease = () => {
+  handleRelease = async () => {
+    await this.fetchAndSetCurrent(mourningStep.stopped);
     const { glowAnim } = this.state;
     timing(glowAnim, {
       toValue: 0,

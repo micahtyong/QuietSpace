@@ -10,31 +10,34 @@ export const fetchCurrent = () => {
         console.error(err);
         reject(err);
       }
-      resolve(record["fields"]["Total"]);
+      resolve(record["fields"]["Currently"]);
     });
   });
 };
 
-export const mourn = () => {
-  base("BLM").update(
-    [
-      {
-        id: "recWVCnlxDRFfUxMs",
-        fields: {
-          Name: "BLM",
-          Currently: 0,
-          Total: 0,
+export const mourn = (newAmount) => {
+  return new Promise((resolve, reject) => {
+    base("BLM").update(
+      [
+        {
+          id: "recWVCnlxDRFfUxMs",
+          fields: {
+            Name: "BLM",
+            Currently: newAmount,
+            Total: newAmount,
+          },
         },
-      },
-    ],
-    function (err, records) {
-      if (err) {
-        console.error(err);
-        return;
+      ],
+      function (err, records) {
+        if (err) {
+          console.error(err);
+          reject(err);
+        }
+        records.forEach(function (record) {
+          console.log(record.get("Currently"));
+        });
+        resolve(newAmount);
       }
-      records.forEach(function (record) {
-        console.log(record.get("Currently"));
-      });
-    }
-  );
+    );
+  });
 };
