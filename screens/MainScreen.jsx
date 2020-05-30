@@ -16,7 +16,7 @@ import {
 } from "react-native-responsive-screen";
 
 const { Value, timing, sequence, loop } = Animated;
-const glow = require('.././assets/glow.png');
+const glow = require(".././assets/glow.png");
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -26,6 +26,7 @@ export default class MainScreen extends React.Component {
       glowAnim: new Value(0),
       breathAnim: new Value(0),
       currentActives: 7583,
+      isMourning: false,
     };
   }
 
@@ -39,7 +40,7 @@ export default class MainScreen extends React.Component {
         fetchCurrent()
           .then((response) => {
             if (response !== null) {
-              console.log("Response issss", response);
+              console.log("Updating", response);
               this.setState({ currentActives: response });
             }
           })
@@ -50,8 +51,11 @@ export default class MainScreen extends React.Component {
           .then((response) => {
             if (response !== null) {
               mourn(response + 1).then((response) => {
-                console.log("Hii resposs", response);
-                this.setState({ currentActives: response });
+                console.log("Mourning now,", response);
+                this.setState(
+                  { currentActives: response, isMourning: true },
+                  this.updateCurrent
+                );
               });
             }
           })
@@ -62,22 +66,30 @@ export default class MainScreen extends React.Component {
           .then((response) => {
             if (response !== null) {
               mourn(response - 1).then((response) => {
-                console.log("Hii resposs", response);
-                this.setState({ currentActives: response });
+                console.log("No longer mourning,", response);
+                this.setState({ currentActives: response, isMourning: false });
               });
             }
           })
           .catch((err) => console.log(err));
     }
   };
+
   breathOut = () => {
-    console.log("breathout")
-  }
+    console.log("breathout");
+  };
+
+  updateCurrent = async () => {
+    const { isMourning } = this.state;
+    if (isMourning) {
+      await this.fetchAndSetCurrent();
+      setTimeout(this.updateCurrent, 3000);
+    }
+  };
 
   handlePress = async () => {
     await this.fetchAndSetCurrent(mourningStep.mourning);
     const { glowAnim } = this.state;
-
     timing(glowAnim, {
       toValue: 1,
       duration: 5000,
@@ -98,12 +110,15 @@ export default class MainScreen extends React.Component {
   render() {
     const { glowAnim, currentActives } = this.state;
     return (
-      <Animated.View style={{
-        ...styles.container, backgroundColor: glowAnim.interpolate({
-          inputRange: [0, 1],
-          outputRange: ['#222222', '#143A56'],
-        })
-      }}>
+      <Animated.View
+        style={{
+          ...styles.container,
+          backgroundColor: glowAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: ["#222222", "#143A56"],
+          }),
+        }}
+      >
         <Animated.View style={{ ...styles.topContainer, opacity: glowAnim }}>
           <Text style={styles.numberText}>{currentActives}</Text>
         </Animated.View>
@@ -137,7 +152,7 @@ export default class MainScreen extends React.Component {
                 }),
               }}
             >
-              <Image source={glow} style={{ resizeMode: 'cover' }} />
+              <Image source={glow} style={{ resizeMode: "cover" }} />
             </Animated.View>
           </TouchableWithoutFeedback>
         </View>
@@ -175,7 +190,7 @@ const styles = StyleSheet.create({
   touchableContainer: {
     width: 75,
     height: 75,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
