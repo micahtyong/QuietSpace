@@ -88,13 +88,13 @@ export default class MainScreen extends React.Component {
   };
 
   handlePress = async () => {
-    await this.fetchAndSetCurrent(mourningStep.mourning);
     const { glowAnim } = this.state;
-    timing(glowAnim, {
+    await timing(glowAnim, {
       toValue: 1,
       duration: 5000,
       easing: Easing.elastic(1),
     }).start();
+    await this.fetchAndSetCurrent(mourningStep.mourning);
   };
 
   handleRelease = async () => {
