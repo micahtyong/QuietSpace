@@ -8,6 +8,7 @@ import {
   Easing,
   Image,
 } from "react-native";
+import { Icon } from "react-native-elements";
 import { fetchCurrent, mourn } from ".././utils/Airtable";
 import { mourningStep } from ".././utils/Enumerations";
 import {
@@ -75,10 +76,6 @@ export default class MainScreen extends React.Component {
     }
   };
 
-  breathOut = () => {
-    console.log("breathout");
-  };
-
   updateCurrent = async () => {
     const { isMourning } = this.state;
     if (isMourning) {
@@ -109,6 +106,7 @@ export default class MainScreen extends React.Component {
 
   render() {
     const { glowAnim, currentActives } = this.state;
+    const { navigation } = this.props;
     return (
       <Animated.View
         style={{
@@ -155,6 +153,15 @@ export default class MainScreen extends React.Component {
               <Image source={glow} style={{ resizeMode: "cover" }} />
             </Animated.View>
           </TouchableWithoutFeedback>
+          <Icon
+            raised
+            reverse
+            containerStyle={styles.infoContainer}
+            name='info'
+            type='font-awesome'
+            color='#246696'
+            onPress={() => navigation.navigate("About")}
+          />
         </View>
       </Animated.View>
     );
@@ -192,5 +199,9 @@ const styles = StyleSheet.create({
     height: 75,
     justifyContent: "center",
     alignItems: "center",
+  },
+  infoContainer: {
+    bottom: -80,
+    alignSelf: "flex-end",
   },
 });
