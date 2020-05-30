@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Asset } from 'expo-asset';
 import 'react-native-gesture-handler';
-
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import AppContainer from './AppContainer';
@@ -37,5 +37,7 @@ export default class App extends React.Component {
         </SafeAreaProvider>
       )
     }
+
+    return <AppContainer />
   }
 }
