@@ -167,10 +167,6 @@ export default class MainScreen extends React.Component {
       if (finished) {
         this.handlePress();
         this.changeName();
-<<<<<<< HEAD
-=======
-      } else {
->>>>>>> f21b782a6a0be1d4a141f09fb95ff09d8f7dcf01
       }
     });
   };
