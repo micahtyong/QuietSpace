@@ -28,6 +28,7 @@ export default class MainScreen extends React.Component {
     this.state = {
       glowAnim: new Value(0),
       breathAnim: new Value(0),
+      backgroundAnim: new Value(0),
       currentActives: 7583,
       lives: [],
       isMourning: false,
@@ -96,32 +97,36 @@ export default class MainScreen extends React.Component {
   };
 
   handlePress = async () => {
-    const { glowAnim, breathAnim, isMourning } = this.state;
+    const { glowAnim, breathAnim, backgroundAnim, isMourning } = this.state;
     await parallel([
       timing(glowAnim, {
         toValue: 1,
-        duration: 5000,
-        easing: Easing.elastic(1),
+        duration: 3000,
+        easing: Easing.elastic(.5),
       }),
       timing(breathAnim, {
         toValue: 0.35,
-        duration: 5000,
-        easing: Easing.elastic(1),
+        duration: 3000,
+        easing: Easing.elastic(.5),
       }),
+      timing(backgroundAnim, {
+        toValue: 1,
+        duration: 3000,
+        easing: Easing.elastic(.5)
+      })
     ]).start(async ({ finished }) => {
       if (finished) {
         this.breathOut();
         if (!isMourning) {
           await this.fetchAndSetCurrent(mourningStep.mourning);
         }
-      } else {
       }
     });
 
   };
 
   handleRelease = async () => {
-    const { glowAnim, breathAnim, isMourning } = this.state;
+    const { glowAnim, breathAnim, backgroundAnim, isMourning } = this.state;
     parallel([
       timing(glowAnim, {
         toValue: 0,
@@ -133,11 +138,15 @@ export default class MainScreen extends React.Component {
         duration: 5000,
         easing: Easing.elastic(1),
       }),
+      timing(backgroundAnim, {
+        toValue: 0,
+        duration: 3000,
+        easing: Easing.elastic(.5)
+      })
     ]).start(async ({ finished }) => {
       if (finished && isMourning) {
         this.setState({ currentName: "George Floyd" });
         await this.fetchAndSetCurrent(mourningStep.stopped);
-      } else {
       }
     });
     ;
@@ -147,21 +156,19 @@ export default class MainScreen extends React.Component {
     const { glowAnim, breathAnim } = this.state;
     await parallel([
       timing(glowAnim, {
-        toValue: 0.75,
-        duration: 3000,
-        easing: Easing.elastic(1),
+        toValue: 0.5,
+        duration: 4000,
+        easing: Easing.elastic(.5),
       }),
       timing(breathAnim, {
         toValue: 0,
-        duration: 3000,
-        easing: Easing.elastic(1),
+        duration: 4000,
+        easing: Easing.elastic(.5),
       }),
     ]).start(async ({ finished }) => {
       if (finished) {
         this.handlePress();
         this.changeName();
-      } else {
-
       }
     });
   };
@@ -175,7 +182,7 @@ export default class MainScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { glowAnim, breathAnim, currentActives, currentName } = this.state;
+    const { glowAnim, breathAnim, backgroundAnim, currentActives, currentName } = this.state;
     return (
       <Animated.View
         style={{
@@ -189,7 +196,7 @@ export default class MainScreen extends React.Component {
         <Animated.View
           style={{
             ...styles.infoContainer,
-            opacity: glowAnim.interpolate({
+            opacity: backgroundAnim.interpolate({
               inputRange: [0, 1],
               outputRange: [1, 0],
             }),
