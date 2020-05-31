@@ -5,6 +5,7 @@ import {
   View,
   Animated,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Easing,
   Image,
 } from "react-native";
@@ -16,8 +17,16 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-const { Value, timing, sequence, loop } = Animated;
-const glow = require(".././assets/glow.png");
+const { Value, timing, sequence, loop, parallel } = Animated;
+const glow = require('.././assets/glow.png');
+const info = require('.././assets/infoIcon.png');
+const nameList = ['Breonna Taylor', 'Ahmaud Arbery', 'Stephon Clark',
+  'Alton Sterling', 'Terence Crutcher', 'Philandro Castile', 'Antonio Martin',
+  'Walter Scott', 'Christian Taylor', 'Michael Brown', 'Trayvon Martin',
+  'Dontre Hamilton', 'Eric Garner', 'John Crawford III', 'Samuel Dubose',
+  'Sandra Bland', 'Ezell Ford', 'Dante Parker', 'Tanisha Anderson', 'Akai Gurley',
+  'Tamir Rice', 'Rumain Brisbon', 'Laquan McDonald', 'Jermaine Reed', 'Tony Robinson',
+  'Phillip White',];
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -28,6 +37,7 @@ export default class MainScreen extends React.Component {
       breathAnim: new Value(0),
       currentActives: 7583,
       isMourning: false,
+      currentName: 'George Floyd'
     };
   }
 
@@ -84,29 +94,83 @@ export default class MainScreen extends React.Component {
     }
   };
 
-  handlePress = async () => {
-    const { glowAnim } = this.state;
-    await timing(glowAnim, {
-      toValue: 1,
-      duration: 5000,
-      easing: Easing.elastic(1),
-    }).start();
-    await this.fetchAndSetCurrent(mourningStep.mourning);
+  handlePress = async (isSameSession) => {
+    const { glowAnim, breathAnim } = this.state;
+    await parallel([
+      timing(glowAnim, {
+        toValue: 1,
+        duration: 5000,
+        easing: Easing.elastic(1),
+      }),
+      timing(breathAnim, {
+        toValue: .35,
+        duration: 5000,
+        easing: Easing.elastic(1),
+      })]).start(({ finished }) => {
+        if (finished) {
+          this.breathOut();
+        }
+      });
+    if (!isSameSession) {
+      await this.fetchAndSetCurrent(mourningStep.mourning);
+    }
   };
 
   handleRelease = async () => {
     await this.fetchAndSetCurrent(mourningStep.stopped);
-    const { glowAnim } = this.state;
-    timing(glowAnim, {
-      toValue: 0,
-      duration: 5000,
-      easing: Easing.elastic(1),
-    }).start();
+    const { glowAnim, breathAnim } = this.state;
+    parallel([
+      timing(glowAnim, {
+        toValue: 0,
+        duration: 5000,
+        easing: Easing.elastic(1),
+      }),
+      timing(breathAnim, {
+        toValue: 0,
+        duration: 5000,
+        easing: Easing.elastic(1)
+      })
+    ]).start(({ finished }) => {
+      if (finished) {
+        this.setState({ currentName: 'George Floyd' })
+      }
+    });
   };
 
+  breathOut = async () => {
+    const { glowAnim, breathAnim } = this.state;
+    await parallel([
+      timing(glowAnim, {
+        toValue: 0.75,
+        duration: 3000,
+        easing: Easing.elastic(1)
+      }),
+      timing(breathAnim, {
+        toValue: 0,
+        duration: 3000,
+        easing: Easing.elastic(1)
+      })]).start(({ finished }) => {
+        if (finished) {
+          this.handlePress(true);
+          this.changeName();
+        } else {
+          this.handleRelease();
+        }
+      })
+  }
+
+  changeName = () => {
+    this.setState({ currentName: nameList[Math.floor(Math.random() * nameList.length)] })
+  }
+
   render() {
+<<<<<<< HEAD
     const { glowAnim, currentActives } = this.state;
     const { navigation } = this.props;
+=======
+    const { navigation } = this.props;
+    const { glowAnim, breathAnim, currentActives, currentName } = this.state;
+>>>>>>> 94501779ccaf0c82a6ab5b09c01ac35e878fb903
     return (
       <Animated.View
         style={{
@@ -117,8 +181,21 @@ export default class MainScreen extends React.Component {
           }),
         }}
       >
+        <Animated.View style={{
+          ...styles.infoContainer, opacity: glowAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0]
+          })
+        }}>
+          <TouchableOpacity style={{ backgroundColor: 'gray', borderRadius: 100, opacity: 0.5, }} onPress={() => { navigation.navigate('Info') }}>
+            <Image source={info} style={styles.infoImage} />
+          </TouchableOpacity>
+        </Animated.View>
         <Animated.View style={{ ...styles.topContainer, opacity: glowAnim }}>
           <Text style={styles.numberText}>{currentActives}</Text>
+        </Animated.View>
+        <Animated.View style={{ ...styles.nameContainer, opacity: breathAnim }}>
+          <Text style={styles.nameText}>{currentName}</Text>
         </Animated.View>
         <View style={styles.bottomContainer}>
           <TouchableWithoutFeedback
@@ -129,16 +206,18 @@ export default class MainScreen extends React.Component {
               this.handleRelease();
             }}
           >
-            <Animated.View
+            <Animated.Image
+              source={glow}
+              resizeMode='cover'
               style={{
                 ...styles.touchableContainer,
                 width: glowAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [75, 110],
+                  outputRange: [120, 150],
                 }),
                 height: glowAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [75, 110],
+                  outputRange: [120, 150],
                 }),
                 opacity: glowAnim.interpolate({
                   inputRange: [0, 1],
@@ -150,8 +229,7 @@ export default class MainScreen extends React.Component {
                 }),
               }}
             >
-              <Image source={glow} style={{ resizeMode: "cover" }} />
-            </Animated.View>
+            </Animated.Image>
           </TouchableWithoutFeedback>
           <Icon
             raised
@@ -175,17 +253,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  infoContainer: {
+    position: 'absolute',
+    width: wp(100),
+    alignItems: 'flex-end',
+    marginTop: hp(7.5),
+    paddingHorizontal: wp(10),
+  },
+  infoImage: {
+    width: 40,
+    height: 40,
+  },
   topContainer: {
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: hp(25),
+    marginTop: hp(20),
   },
   numberText: {
     fontSize: 64,
     fontFamily: "Helvetica Neue",
     color: "white",
     textAlignVertical: "center",
+  },
+  nameText: {
+    color: 'white',
+    fontSize: 24,
   },
   bottomContainer: {
     width: wp(100),
