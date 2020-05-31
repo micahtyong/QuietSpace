@@ -114,10 +114,8 @@ export default class MainScreen extends React.Component {
         if (!isMourning) {
           await this.fetchAndSetCurrent(mourningStep.mourning);
         }
-      } else {
       }
     });
-
   };
 
   handleRelease = async () => {
@@ -137,10 +135,8 @@ export default class MainScreen extends React.Component {
       if (finished && isMourning) {
         this.setState({ currentName: "George Floyd" });
         await this.fetchAndSetCurrent(mourningStep.stopped);
-      } else {
       }
     });
-    ;
   };
 
   breathOut = async () => {
@@ -161,7 +157,6 @@ export default class MainScreen extends React.Component {
         this.handlePress();
         this.changeName();
       } else {
-
       }
     });
   };
@@ -216,7 +211,7 @@ export default class MainScreen extends React.Component {
               this.handlePress();
             }}
             onPressOut={() => {
-              this.handleRelease()
+              this.handleRelease();
             }}
           >
             <Animated.Image
