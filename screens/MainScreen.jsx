@@ -5,6 +5,7 @@ import {
   View,
   Animated,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Easing,
   Image,
 } from "react-native";
@@ -16,7 +17,8 @@ import {
 } from "react-native-responsive-screen";
 
 const { Value, timing, sequence, loop } = Animated;
-const glow = require(".././assets/glow.png");
+const glow = require('.././assets/glow.png');
+const info = require('.././assets/infoIcon.png');
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -108,6 +110,7 @@ export default class MainScreen extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
     const { glowAnim, currentActives } = this.state;
     return (
       <Animated.View
@@ -119,6 +122,16 @@ export default class MainScreen extends React.Component {
           }),
         }}
       >
+        <Animated.View style={{
+          ...styles.infoContainer, opacity: glowAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0]
+          })
+        }}>
+          <TouchableOpacity style={{ backgroundColor: 'gray', borderRadius: 100, opacity: 0.5, }} onPress={() => { navigation.navigate('Info') }}>
+            <Image source={info} style={styles.infoImage} />
+          </TouchableOpacity>
+        </Animated.View>
         <Animated.View style={{ ...styles.topContainer, opacity: glowAnim }}>
           <Text style={styles.numberText}>{currentActives}</Text>
         </Animated.View>
@@ -131,16 +144,18 @@ export default class MainScreen extends React.Component {
               this.handleRelease();
             }}
           >
-            <Animated.View
+            <Animated.Image
+              source={glow}
+              resizeMode='cover'
               style={{
                 ...styles.touchableContainer,
                 width: glowAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [75, 110],
+                  outputRange: [120, 150],
                 }),
                 height: glowAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [75, 110],
+                  outputRange: [120, 150],
                 }),
                 opacity: glowAnim.interpolate({
                   inputRange: [0, 1],
@@ -152,8 +167,7 @@ export default class MainScreen extends React.Component {
                 }),
               }}
             >
-              <Image source={glow} style={{ resizeMode: "cover" }} />
-            </Animated.View>
+            </Animated.Image>
           </TouchableWithoutFeedback>
         </View>
       </Animated.View>
@@ -168,11 +182,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  infoContainer: {
+    width: wp(100),
+    alignItems: 'flex-end',
+    marginTop: hp(7.5),
+    paddingHorizontal: wp(10),
+  },
+  infoImage: {
+    width: 40,
+    height: 40,
+  },
   topContainer: {
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: hp(25),
+    bottom: hp(15),
   },
   numberText: {
     fontSize: 64,
