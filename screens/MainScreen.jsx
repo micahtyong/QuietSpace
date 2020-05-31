@@ -102,18 +102,18 @@ export default class MainScreen extends React.Component {
       timing(glowAnim, {
         toValue: 1,
         duration: 3000,
-        easing: Easing.elastic(.5),
+        easing: Easing.elastic(0.5),
       }),
       timing(breathAnim, {
         toValue: 0.35,
         duration: 3000,
-        easing: Easing.elastic(.5),
+        easing: Easing.elastic(0.5),
       }),
       timing(backgroundAnim, {
         toValue: 1,
         duration: 3000,
-        easing: Easing.elastic(.5)
-      })
+        easing: Easing.elastic(0.5),
+      }),
     ]).start(async ({ finished }) => {
       if (finished) {
         this.breathOut();
@@ -140,8 +140,8 @@ export default class MainScreen extends React.Component {
       timing(backgroundAnim, {
         toValue: 0,
         duration: 3000,
-        easing: Easing.elastic(.5)
-      })
+        easing: Easing.elastic(0.5),
+      }),
     ]).start(async ({ finished }) => {
       if (finished && isMourning) {
         this.setState({ currentName: "George Floyd" });
@@ -156,12 +156,12 @@ export default class MainScreen extends React.Component {
       timing(glowAnim, {
         toValue: 0.5,
         duration: 4000,
-        easing: Easing.elastic(.5),
+        easing: Easing.elastic(0.5),
       }),
       timing(breathAnim, {
         toValue: 0,
         duration: 4000,
-        easing: Easing.elastic(.5),
+        easing: Easing.elastic(0.5),
       }),
     ]).start(async ({ finished }) => {
       if (finished) {
@@ -180,7 +180,13 @@ export default class MainScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { glowAnim, breathAnim, backgroundAnim, currentActives, currentName } = this.state;
+    const {
+      glowAnim,
+      breathAnim,
+      backgroundAnim,
+      currentActives,
+      currentName,
+    } = this.state;
     return (
       <Animated.View
         style={{
@@ -248,17 +254,16 @@ export default class MainScreen extends React.Component {
               }}
             ></Animated.Image>
           </TouchableWithoutFeedback>
-          <Icon
-            raised
-            reverse
+          {/* <Icon
             containerStyle={styles.infoContainer}
-            name='info'
-            type='font-awesome'
-            color='#246696'
+            size={wp(8)}
+            name='ios-information-circle-outline'
+            type='ionicon'
+            color='#616161'
             onPress={() => {
               navigation.navigate("Info");
             }}
-          />
+          /> */}
         </View>
       </Animated.View>
     );
