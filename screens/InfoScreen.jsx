@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     width: wp(100),
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: hp(5),
+    marginTop: hp(7.5),
     paddingHorizontal: wp(7.5),
   },
   backButtonImage: {
@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 35,
     height: 35,
+    opacity: 0.5,
   },
   screenTitleText: {
     alignSelf: 'center',
