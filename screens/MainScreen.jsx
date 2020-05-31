@@ -10,7 +10,7 @@ import {
   Image,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { fetchCurrent, mourn } from ".././utils/Airtable";
+import { fetchCurrent, fetchLives, mourn } from ".././utils/Airtable";
 import { mourningStep } from ".././utils/Enumerations";
 import {
   heightPercentageToDP as hp,
@@ -20,34 +20,6 @@ import {
 const { Value, timing, sequence, loop, parallel } = Animated;
 const glow = require(".././assets/glow.png");
 const info = require(".././assets/infoIcon.png");
-const nameList = [
-  "Breonna Taylor",
-  "Ahmaud Arbery",
-  "Stephon Clark",
-  "Alton Sterling",
-  "Terence Crutcher",
-  "Philandro Castile",
-  "Antonio Martin",
-  "Walter Scott",
-  "Christian Taylor",
-  "Michael Brown",
-  "Trayvon Martin",
-  "Dontre Hamilton",
-  "Eric Garner",
-  "John Crawford III",
-  "Samuel Dubose",
-  "Sandra Bland",
-  "Ezell Ford",
-  "Dante Parker",
-  "Tanisha Anderson",
-  "Akai Gurley",
-  "Tamir Rice",
-  "Rumain Brisbon",
-  "Laquan McDonald",
-  "Jermaine Reed",
-  "Tony Robinson",
-  "Phillip White",
-];
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -57,6 +29,7 @@ export default class MainScreen extends React.Component {
       glowAnim: new Value(0),
       breathAnim: new Value(0),
       currentActives: 7583,
+      lives: [],
       isMourning: false,
       currentName: "George Floyd",
     };
@@ -64,6 +37,12 @@ export default class MainScreen extends React.Component {
 
   componentDidMount = async () => {
     await this.fetchAndSetCurrent();
+    fetchLives().then((lives) => {
+      if (lives !== null) {
+        console.log("Here are the lives lost", lives);
+        this.setState({ lives });
+      }
+    });
   };
 
   fetchAndSetCurrent = async (isMourning = mourningStep.neutral) => {
@@ -183,8 +162,9 @@ export default class MainScreen extends React.Component {
   };
 
   changeName = () => {
+    const { lives } = this.state;
     this.setState({
-      currentName: nameList[Math.floor(Math.random() * nameList.length)],
+      currentName: lives[Math.floor(Math.random() * lives.length)],
     });
   };
 
