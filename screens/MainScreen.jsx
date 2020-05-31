@@ -32,6 +32,7 @@ export default class MainScreen extends React.Component {
       lives: [],
       isMourning: false,
       currentName: "George Floyd",
+      wasCounted: false,
     };
   }
 
@@ -94,8 +95,8 @@ export default class MainScreen extends React.Component {
     }
   };
 
-  handlePress = async (isSameSession) => {
-    const { glowAnim, breathAnim } = this.state;
+  handlePress = async () => {
+    const { glowAnim, breathAnim, isMourning } = this.state;
     await parallel([
       timing(glowAnim, {
         toValue: 1,
@@ -107,19 +108,20 @@ export default class MainScreen extends React.Component {
         duration: 5000,
         easing: Easing.elastic(1),
       }),
-    ]).start(({ finished }) => {
+    ]).start(async ({ finished }) => {
       if (finished) {
         this.breathOut();
+        if (!isMourning) {
+          await this.fetchAndSetCurrent(mourningStep.mourning);
+        }
+      } else {
       }
     });
-    if (!isSameSession) {
-      await this.fetchAndSetCurrent(mourningStep.mourning);
-    }
+
   };
 
   handleRelease = async () => {
-    await this.fetchAndSetCurrent(mourningStep.stopped);
-    const { glowAnim, breathAnim } = this.state;
+    const { glowAnim, breathAnim, isMourning } = this.state;
     parallel([
       timing(glowAnim, {
         toValue: 0,
@@ -131,11 +133,14 @@ export default class MainScreen extends React.Component {
         duration: 5000,
         easing: Easing.elastic(1),
       }),
-    ]).start(({ finished }) => {
-      if (finished) {
+    ]).start(async ({ finished }) => {
+      if (finished && isMourning) {
         this.setState({ currentName: "George Floyd" });
+        await this.fetchAndSetCurrent(mourningStep.stopped);
+      } else {
       }
     });
+    ;
   };
 
   breathOut = async () => {
@@ -151,12 +156,12 @@ export default class MainScreen extends React.Component {
         duration: 3000,
         easing: Easing.elastic(1),
       }),
-    ]).start(({ finished }) => {
+    ]).start(async ({ finished }) => {
       if (finished) {
-        this.handlePress(true);
+        this.handlePress();
         this.changeName();
       } else {
-        this.handleRelease();
+
       }
     });
   };
@@ -211,7 +216,7 @@ export default class MainScreen extends React.Component {
               this.handlePress();
             }}
             onPressOut={() => {
-              this.handleRelease();
+              this.handleRelease()
             }}
           >
             <Animated.Image
