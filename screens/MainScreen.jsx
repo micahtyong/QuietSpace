@@ -18,15 +18,36 @@ import {
 } from "react-native-responsive-screen";
 
 const { Value, timing, sequence, loop, parallel } = Animated;
-const glow = require('.././assets/glow.png');
-const info = require('.././assets/infoIcon.png');
-const nameList = ['Breonna Taylor', 'Ahmaud Arbery', 'Stephon Clark',
-  'Alton Sterling', 'Terence Crutcher', 'Philandro Castile', 'Antonio Martin',
-  'Walter Scott', 'Christian Taylor', 'Michael Brown', 'Trayvon Martin',
-  'Dontre Hamilton', 'Eric Garner', 'John Crawford III', 'Samuel Dubose',
-  'Sandra Bland', 'Ezell Ford', 'Dante Parker', 'Tanisha Anderson', 'Akai Gurley',
-  'Tamir Rice', 'Rumain Brisbon', 'Laquan McDonald', 'Jermaine Reed', 'Tony Robinson',
-  'Phillip White',];
+const glow = require(".././assets/glow.png");
+const info = require(".././assets/infoIcon.png");
+const nameList = [
+  "Breonna Taylor",
+  "Ahmaud Arbery",
+  "Stephon Clark",
+  "Alton Sterling",
+  "Terence Crutcher",
+  "Philandro Castile",
+  "Antonio Martin",
+  "Walter Scott",
+  "Christian Taylor",
+  "Michael Brown",
+  "Trayvon Martin",
+  "Dontre Hamilton",
+  "Eric Garner",
+  "John Crawford III",
+  "Samuel Dubose",
+  "Sandra Bland",
+  "Ezell Ford",
+  "Dante Parker",
+  "Tanisha Anderson",
+  "Akai Gurley",
+  "Tamir Rice",
+  "Rumain Brisbon",
+  "Laquan McDonald",
+  "Jermaine Reed",
+  "Tony Robinson",
+  "Phillip White",
+];
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -37,7 +58,7 @@ export default class MainScreen extends React.Component {
       breathAnim: new Value(0),
       currentActives: 7583,
       isMourning: false,
-      currentName: 'George Floyd'
+      currentName: "George Floyd",
     };
   }
 
@@ -103,14 +124,15 @@ export default class MainScreen extends React.Component {
         easing: Easing.elastic(1),
       }),
       timing(breathAnim, {
-        toValue: .35,
+        toValue: 0.35,
         duration: 5000,
         easing: Easing.elastic(1),
-      })]).start(({ finished }) => {
-        if (finished) {
-          this.breathOut();
-        }
-      });
+      }),
+    ]).start(({ finished }) => {
+      if (finished) {
+        this.breathOut();
+      }
+    });
     if (!isSameSession) {
       await this.fetchAndSetCurrent(mourningStep.mourning);
     }
@@ -128,11 +150,11 @@ export default class MainScreen extends React.Component {
       timing(breathAnim, {
         toValue: 0,
         duration: 5000,
-        easing: Easing.elastic(1)
-      })
+        easing: Easing.elastic(1),
+      }),
     ]).start(({ finished }) => {
       if (finished) {
-        this.setState({ currentName: 'George Floyd' })
+        this.setState({ currentName: "George Floyd" });
       }
     });
   };
@@ -143,34 +165,32 @@ export default class MainScreen extends React.Component {
       timing(glowAnim, {
         toValue: 0.75,
         duration: 3000,
-        easing: Easing.elastic(1)
+        easing: Easing.elastic(1),
       }),
       timing(breathAnim, {
         toValue: 0,
         duration: 3000,
-        easing: Easing.elastic(1)
-      })]).start(({ finished }) => {
-        if (finished) {
-          this.handlePress(true);
-          this.changeName();
-        } else {
-          this.handleRelease();
-        }
-      })
-  }
+        easing: Easing.elastic(1),
+      }),
+    ]).start(({ finished }) => {
+      if (finished) {
+        this.handlePress(true);
+        this.changeName();
+      } else {
+        this.handleRelease();
+      }
+    });
+  };
 
   changeName = () => {
-    this.setState({ currentName: nameList[Math.floor(Math.random() * nameList.length)] })
-  }
+    this.setState({
+      currentName: nameList[Math.floor(Math.random() * nameList.length)],
+    });
+  };
 
   render() {
-<<<<<<< HEAD
-    const { glowAnim, currentActives } = this.state;
-    const { navigation } = this.props;
-=======
     const { navigation } = this.props;
     const { glowAnim, breathAnim, currentActives, currentName } = this.state;
->>>>>>> 94501779ccaf0c82a6ab5b09c01ac35e878fb903
     return (
       <Animated.View
         style={{
@@ -181,13 +201,21 @@ export default class MainScreen extends React.Component {
           }),
         }}
       >
-        <Animated.View style={{
-          ...styles.infoContainer, opacity: glowAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, 0]
-          })
-        }}>
-          <TouchableOpacity style={{ backgroundColor: 'gray', borderRadius: 100, opacity: 0.5, }} onPress={() => { navigation.navigate('Info') }}>
+        <Animated.View
+          style={{
+            ...styles.infoContainer,
+            opacity: glowAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0],
+            }),
+          }}
+        >
+          <TouchableOpacity
+            style={{ backgroundColor: "gray", borderRadius: 100, opacity: 0.5 }}
+            onPress={() => {
+              navigation.navigate("Info");
+            }}
+          >
             <Image source={info} style={styles.infoImage} />
           </TouchableOpacity>
         </Animated.View>
@@ -228,8 +256,7 @@ export default class MainScreen extends React.Component {
                   outputRange: [0, hp(5)],
                 }),
               }}
-            >
-            </Animated.Image>
+            ></Animated.Image>
           </TouchableWithoutFeedback>
           <Icon
             raised
@@ -238,7 +265,9 @@ export default class MainScreen extends React.Component {
             name='info'
             type='font-awesome'
             color='#246696'
-            onPress={() => navigation.navigate("About")}
+            onPress={() => {
+              navigation.navigate("Info");
+            }}
           />
         </View>
       </Animated.View>
@@ -254,9 +283,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   infoContainer: {
-    position: 'absolute',
+    position: "absolute",
     width: wp(100),
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     marginTop: hp(7.5),
     paddingHorizontal: wp(10),
   },
@@ -277,7 +306,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   nameText: {
-    color: 'white',
+    color: "white",
     fontSize: 24,
   },
   bottomContainer: {
