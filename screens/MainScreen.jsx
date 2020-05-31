@@ -122,7 +122,6 @@ export default class MainScreen extends React.Component {
         }
       }
     });
-
   };
 
   handleRelease = async () => {
@@ -149,7 +148,6 @@ export default class MainScreen extends React.Component {
         await this.fetchAndSetCurrent(mourningStep.stopped);
       }
     });
-    ;
   };
 
   breathOut = async () => {
@@ -169,6 +167,10 @@ export default class MainScreen extends React.Component {
       if (finished) {
         this.handlePress();
         this.changeName();
+<<<<<<< HEAD
+=======
+      } else {
+>>>>>>> f21b782a6a0be1d4a141f09fb95ff09d8f7dcf01
       }
     });
   };
@@ -223,7 +225,7 @@ export default class MainScreen extends React.Component {
               this.handlePress();
             }}
             onPressOut={() => {
-              this.handleRelease()
+              this.handleRelease();
             }}
           >
             <Animated.Image

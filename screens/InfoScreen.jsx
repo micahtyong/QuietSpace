@@ -1,12 +1,10 @@
-import React, { Component } from "react";
+import React, { useCallback } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Animated,
-  TouchableWithoutFeedback,
   TouchableOpacity,
-  Easing,
   Image,
   ScrollView,
   Linking,
@@ -24,6 +22,7 @@ const backButton = require(".././assets/backButton.png");
 const information = [
   {
     section: "1",
+    type: "text",
     title: "Why We Made Ember",
     body: [
       {
@@ -40,6 +39,7 @@ const information = [
   },
   {
     section: "2",
+    type: "text",
     title: "How It Works",
     body: [
       {
@@ -54,16 +54,44 @@ const information = [
   },
   {
     section: "3",
+    type: "url",
     title: "How You Can Help",
     body: [
       {
         paragraph: "1",
-        description: "Black Lives Matter Website: ",
+        description: "Black Lives Matter Website",
         link: "https://blacklivesmatter.com",
       },
     ],
   },
 ];
+
+const supportedURL = "https://blacklivesmatter.com";
+
+const OpenURLButton = ({ url, text }) => {
+  const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, [url]);
+
+  return (
+    <TouchableOpacity onPress={handlePress}>
+      <Text
+        style={{ ...styles.paragraphText, textDecorationLine: "underline" }}
+      >
+        {text}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -112,9 +140,16 @@ export default class MainScreen extends React.Component {
               <Text style={styles.headText}>{text.title}</Text>
               {text.body.map((paragraph) => (
                 <View key={"idParagraphSection" + paragraph.paragraph}>
-                  <Text style={styles.paragraphText}>
-                    {paragraph.description}
-                  </Text>
+                  {text.type === "url" ? (
+                    <OpenURLButton
+                      url={supportedURL}
+                      text={paragraph.description}
+                    />
+                  ) : (
+                    <Text style={styles.paragraphText}>
+                      {paragraph.description}
+                    </Text>
+                  )}
                 </View>
               ))}
             </View>
