@@ -20,7 +20,7 @@ const { Value, timing, sequence, loop, parallel } = Animated;
 const glow = require('.././assets/glow.png');
 const info = require('.././assets/infoIcon.png');
 const nameList = ['Breonna Taylor', 'Ahmaud Arbery', 'Stephon Clark',
-  'Alton Sterling', 'Terence Crutcher', 'Philandro Castile',
+  'Alton Sterling', 'Terence Crutcher', 'Philandro Castile', 'Antonio Martin',
   'Walter Scott', 'Christian Taylor', 'Michael Brown', 'Trayvon Martin',
   'Dontre Hamilton', 'Eric Garner', 'John Crawford III', 'Samuel Dubose',
   'Sandra Bland', 'Ezell Ford', 'Dante Parker', 'Tanisha Anderson', 'Akai Gurley',
@@ -102,7 +102,7 @@ export default class MainScreen extends React.Component {
         easing: Easing.elastic(1),
       }),
       timing(breathAnim, {
-        toValue: 1,
+        toValue: .35,
         duration: 5000,
         easing: Easing.elastic(1),
       })]).start(({ finished }) => {
@@ -112,8 +112,6 @@ export default class MainScreen extends React.Component {
       });
     if (!isSameSession) {
       await this.fetchAndSetCurrent(mourningStep.mourning);
-    } else {
-      console.log("SAME SESSION NO INCREMENT!")
     }
   };
 
@@ -131,8 +129,10 @@ export default class MainScreen extends React.Component {
         duration: 5000,
         easing: Easing.elastic(1)
       })
-    ]).start(() => {
-      this.setState({ currentName: 'George Floyd' })
+    ]).start(({ finished }) => {
+      if (finished) {
+        this.setState({ currentName: 'George Floyd' })
+      }
     });
   };
 
@@ -141,13 +141,13 @@ export default class MainScreen extends React.Component {
     await parallel([
       timing(glowAnim, {
         toValue: 0.75,
-        duration: 5000,
-        easing: Easing.ease,
+        duration: 3000,
+        easing: Easing.elastic(1)
       }),
       timing(breathAnim, {
         toValue: 0,
-        duration: 5000,
-        easing: Easing.ease
+        duration: 3000,
+        easing: Easing.elastic(1)
       })]).start(({ finished }) => {
         if (finished) {
           this.handlePress(true);

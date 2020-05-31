@@ -32,7 +32,7 @@ const information = [
       },
       {
         paragraph: '2',
-        description: "We created Ember in response to this. It hopes to provide something a little less cluttered, and a little more focused on what or who we’ve lost."
+        description: "We created Ember in response to this. It hopes to provide something a little less cluttered, and a little more focused on who we’ve lost."
       }
     ]
   },
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   screenTitleText: {
     alignSelf: 'center',
-    color: 'white',
+    color: '#EEEEEE',
     fontWeight: 'bold',
     fontSize: 24,
   },
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     marginVertical: hp(1),
   },
   headText: {
-    color: 'white',
+    color: '#EEEEEE',
     fontWeight: 'bold',
     fontSize: 24,
     marginBottom: 16,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   paragraphText: {
     width: '100%',
     fontSize: 16,
-    color: 'white',
+    color: '#EEEEEE',
     marginBottom: 16,
     paddingHorizontal: wp(5),
     textAlign: 'justify',
