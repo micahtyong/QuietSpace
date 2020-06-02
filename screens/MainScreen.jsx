@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Easing,
   Image,
+  AppState,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { fetchCurrent, fetchLives, mourn } from ".././utils/Airtable";
@@ -38,13 +39,26 @@ export default class MainScreen extends React.Component {
   }
 
   componentDidMount = async () => {
+    AppState.addEventListener('change', this.handleAppStateChange);
+    console.log("welcome back")
     await this.fetchAndSetCurrent();
     fetchLives().then((lives) => {
       if (lives !== null) {
-        console.log("Here are the lives lost", lives);
+        // console.log("Here are the lives lost", lives);
         this.setState({ lives });
       }
     });
+  };
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  };
+
+  handleAppStateChange = async (nextAppState) => {
+    const { isMourning } = this.state;
+    if (nextAppState === 'inactive' && isMourning) {
+      await this.fetchAndSetCurrent(mourningStep.stopped);
+    }
   };
 
   fetchAndSetCurrent = async (isMourning = mourningStep.neutral) => {
@@ -126,7 +140,7 @@ export default class MainScreen extends React.Component {
 
   handleRelease = async () => {
     const { glowAnim, breathAnim, backgroundAnim, isMourning } = this.state;
-    parallel([
+    await parallel([
       timing(glowAnim, {
         toValue: 0,
         duration: 5000,
@@ -143,7 +157,7 @@ export default class MainScreen extends React.Component {
         easing: Easing.elastic(0.5),
       }),
     ]).start(async ({ finished }) => {
-      if (finished && isMourning) {
+      if (finished && this.state.isMourning) { // Do not destructure this.state.isMourning. Value was updated in middle of func call.
         this.setState({ currentName: "George Floyd" });
         await this.fetchAndSetCurrent(mourningStep.stopped);
       }
@@ -254,16 +268,6 @@ export default class MainScreen extends React.Component {
               }}
             ></Animated.Image>
           </TouchableWithoutFeedback>
-          {/* <Icon
-            containerStyle={styles.infoContainer}
-            size={wp(8)}
-            name='ios-information-circle-outline'
-            type='ionicon'
-            color='#616161'
-            onPress={() => {
-              navigation.navigate("Info");
-            }}
-          /> */}
         </View>
       </Animated.View>
     );
