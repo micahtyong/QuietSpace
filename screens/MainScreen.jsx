@@ -39,8 +39,8 @@ export default class MainScreen extends React.Component {
   }
 
   componentDidMount = async () => {
-    AppState.addEventListener('change', this.handleAppStateChange);
-    console.log("welcome back")
+    AppState.addEventListener("change", this.handleAppStateChange);
+    console.log("welcome back");
     await this.fetchAndSetCurrent();
     fetchLives().then((lives) => {
       if (lives !== null) {
@@ -51,12 +51,12 @@ export default class MainScreen extends React.Component {
   };
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
-  };
+    AppState.removeEventListener("change", this.handleAppStateChange);
+  }
 
   handleAppStateChange = async (nextAppState) => {
     const { isMourning } = this.state;
-    if (nextAppState === 'inactive' && isMourning) {
+    if (nextAppState === "inactive" && isMourning) {
       await this.fetchAndSetCurrent(mourningStep.stopped);
     }
   };
@@ -157,8 +157,9 @@ export default class MainScreen extends React.Component {
         easing: Easing.elastic(0.5),
       }),
     ]).start(async ({ finished }) => {
-      if (finished && this.state.isMourning) { // Do not destructure this.state.isMourning. Value was updated in middle of func call.
-        this.setState({ currentName: "George Floyd" });
+      if (finished && isMourning) {
+        // Do not destructure this.state.isMourning. Value was updated in middle of func call.
+        this.setState({ currentName: "George Floyd", isMorning: false });
         await this.fetchAndSetCurrent(mourningStep.stopped);
       }
     });
