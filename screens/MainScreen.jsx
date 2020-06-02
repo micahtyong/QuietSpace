@@ -230,9 +230,11 @@ export default class MainScreen extends React.Component {
           </TouchableOpacity>
         </Animated.View>
         <Animated.View style={{ ...styles.topContainer, opacity: glowAnim }}>
+          <Text style={styles.titleText}>Remembering with you</Text>
           <Text style={styles.numberText}>{currentActives}</Text>
         </Animated.View>
         <Animated.View style={{ ...styles.nameContainer, opacity: breathAnim }}>
+          <Text style={styles.titleText}>In loving memory of</Text>
           <Text style={styles.nameText}>{currentName}</Text>
         </Animated.View>
         <View style={styles.bottomContainer}>
@@ -298,17 +300,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: hp(20),
   },
+  nameContainer: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   numberText: {
     fontSize: 64,
     fontFamily: "Lora",
     color: "white",
     textAlignVertical: "center",
   },
+  titleText: {
+    color: "white",
+    fontFamily: "Lora",
+    fontSize: 20,
+    marginBottom: hp(3),
+  },
   nameText: {
     color: "white",
-    fontFamily: 'Lora',
+    fontFamily: "Lora",
     fontSize: 36,
-    bottom: hp(10),
+    // bottom: hp(10),
   },
   bottomContainer: {
     width: wp(100),
