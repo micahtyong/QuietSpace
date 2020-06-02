@@ -7,9 +7,15 @@ import * as Font from "expo-font";
 import AppContainer from "./AppContainer";
 
 const glow = require("./assets/glow.png");
+const loraFont = require('./assets/Lora-VariableFont_wght.ttf');
 
 async function loadResourcesAsync() {
-  await Promise.all([Asset.loadAsync([glow])]);
+  await Promise.all([
+    Asset.loadAsync([glow]),
+    Font.loadAsync({
+      'Lora': loraFont,
+    }),
+  ]);
 }
 
 export default class App extends React.Component {

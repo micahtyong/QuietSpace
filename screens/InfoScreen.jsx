@@ -146,10 +146,10 @@ export default class MainScreen extends React.Component {
                       text={paragraph.description}
                     />
                   ) : (
-                    <Text style={styles.paragraphText}>
-                      {paragraph.description}
-                    </Text>
-                  )}
+                      <Text style={styles.paragraphText}>
+                        {paragraph.description}
+                      </Text>
+                    )}
                 </View>
               ))}
             </View>
@@ -163,7 +163,7 @@ export default class MainScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#222222",
+    backgroundColor: "#111111",
   },
   topNavigationContainer: {
     flexDirection: "row",
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   screenTitleText: {
     alignSelf: "center",
-    color: "#EEEEEE",
+    color: "#CCCCCC",
     fontWeight: "bold",
     fontSize: 24,
   },
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     marginVertical: hp(1),
   },
   headText: {
-    color: "#EEEEEE",
+    color: "#CCCCCC",
     fontWeight: "bold",
     fontSize: 24,
     marginBottom: 16,
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   paragraphText: {
     width: "100%",
     fontSize: 16,
-    color: "#EEEEEE",
+    color: "#CCCCCC",
     marginBottom: 16,
     paddingHorizontal: wp(5),
     textAlign: "justify",

@@ -101,17 +101,17 @@ export default class MainScreen extends React.Component {
     await parallel([
       timing(glowAnim, {
         toValue: 1,
-        duration: 3000,
+        duration: 4000,
         easing: Easing.elastic(0.5),
       }),
       timing(breathAnim, {
-        toValue: 0.35,
-        duration: 3000,
+        toValue: 0.8,
+        duration: 4000,
         easing: Easing.elastic(0.5),
       }),
       timing(backgroundAnim, {
         toValue: 1,
-        duration: 3000,
+        duration: 4000,
         easing: Easing.elastic(0.5),
       }),
     ]).start(async ({ finished }) => {
@@ -193,7 +193,7 @@ export default class MainScreen extends React.Component {
           ...styles.container,
           backgroundColor: glowAnim.interpolate({
             inputRange: [0, 1],
-            outputRange: ["#222222", "#143A56"],
+            outputRange: ["#111111", "#263038"],
           }),
         }}
       >
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     width: wp(100),
     alignItems: "flex-end",
     marginTop: hp(7.5),
-    paddingHorizontal: wp(10),
+    paddingHorizontal: wp(5),
   },
   infoImage: {
     width: 40,
@@ -296,13 +296,15 @@ const styles = StyleSheet.create({
   },
   numberText: {
     fontSize: 64,
-    fontFamily: "Helvetica Neue",
+    fontFamily: "Lora",
     color: "white",
     textAlignVertical: "center",
   },
   nameText: {
     color: "white",
-    fontSize: 24,
+    fontFamily: 'Lora',
+    fontSize: 36,
+    bottom: hp(10),
   },
   bottomContainer: {
     width: wp(100),
@@ -316,9 +318,5 @@ const styles = StyleSheet.create({
     height: 75,
     justifyContent: "center",
     alignItems: "center",
-  },
-  infoContainer: {
-    bottom: -80,
-    alignSelf: "flex-end",
   },
 });
