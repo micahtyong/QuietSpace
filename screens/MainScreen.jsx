@@ -115,17 +115,17 @@ export default class MainScreen extends React.Component {
     await parallel([
       timing(glowAnim, {
         toValue: 1,
-        duration: 4000,
+        duration: 5000,
         easing: Easing.elastic(0.5),
       }),
       timing(breathAnim, {
-        toValue: 0.8,
-        duration: 4000,
+        toValue: 1,
+        duration: 5000,
         easing: Easing.elastic(0.5),
       }),
       timing(backgroundAnim, {
         toValue: 1,
-        duration: 4000,
+        duration: 5000,
         easing: Easing.elastic(0.5),
       }),
     ]).start(async ({ finished }) => {
@@ -168,13 +168,13 @@ export default class MainScreen extends React.Component {
     const { glowAnim, breathAnim } = this.state;
     await parallel([
       timing(glowAnim, {
-        toValue: 0.5,
-        duration: 4000,
+        toValue: 0.75,
+        duration: 5000,
         easing: Easing.elastic(0.5),
       }),
       timing(breathAnim, {
         toValue: 0,
-        duration: 4000,
+        duration: 5000,
         easing: Easing.elastic(0.5),
       }),
     ]).start(async ({ finished }) => {
@@ -235,7 +235,7 @@ export default class MainScreen extends React.Component {
         </Animated.View>
         <Animated.View style={{ ...styles.nameContainer, opacity: breathAnim }}>
           <Text style={styles.titleText}>In loving memory of</Text>
-          <Text style={styles.nameText}>{currentName}</Text>
+          <Text style={styles.titleText}>{`— ${currentName} —`}</Text>
         </Animated.View>
         <View style={styles.bottomContainer}>
           <TouchableWithoutFeedback
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   titleText: {
     color: "white",
     fontFamily: "Lora",
-    fontSize: 20,
+    fontSize: 24,
     marginBottom: hp(3),
   },
   nameText: {

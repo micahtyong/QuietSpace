@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     color: "#CCCCCC",
     fontWeight: "bold",
     fontSize: 24,
+    fontFamily: "Lora",
   },
   textContainer: {
     width: wp(100),
@@ -201,6 +202,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 24,
     marginBottom: 16,
+    fontFamily: "Lora",
   },
   paragraphContainer: {
     marginBottom: hp(2),
@@ -214,5 +216,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: wp(5),
     textAlign: "justify",
+    fontFamily: "Lora",
   },
 });
