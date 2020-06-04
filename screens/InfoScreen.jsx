@@ -3,70 +3,20 @@ import {
   StyleSheet,
   Text,
   View,
-  Animated,
   TouchableOpacity,
   Image,
   ScrollView,
   Linking,
+  Button,
 } from "react-native";
-import { fetchCurrent, mourn } from ".././utils/Airtable";
-import { mourningStep } from ".././utils/Enumerations";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import Communications from 'react-native-communications';
+import SendSMS from 'react-native-sms';
 
-const { Value, timing, sequence, loop } = Animated;
 const backButton = require(".././assets/backButton.png");
-
-const information = [
-  {
-    section: "1",
-    type: "text",
-    title: "Why We Made Ember",
-    body: [
-      {
-        paragraph: "1",
-        description:
-          "We are grieving after George Floyds death, but there aren't many avenues for us to honor his life and show solidarity with one another. There’s social media, but sometimes it can feel overwhelming and really graphic with many hard-to-watch videos circulating, we’re just not sure if that’s the best way to honor someone’s life.",
-      },
-      {
-        paragraph: "2",
-        description:
-          "We created Ember in response to this. It hopes to provide something a little less cluttered, and a little more focused on who we’ve lost.",
-      },
-    ],
-  },
-  {
-    section: "2",
-    type: "text",
-    title: "How It Works",
-    body: [
-      {
-        paragraph: "1",
-        description: "1.) Press to light your ember.",
-      },
-      {
-        description:
-          "2.) The number shows how many others are holding onto the light and standing in solidarity with you.",
-      },
-    ],
-  },
-  {
-    section: "3",
-    type: "url",
-    title: "How You Can Help",
-    body: [
-      {
-        paragraph: "1",
-        description: "Black Lives Matter Website",
-        link: "https://blacklivesmatter.com",
-      },
-    ],
-  },
-];
-
-const supportedURL = "https://blacklivesmatter.com";
 
 const OpenURLButton = ({ url, text }) => {
   const handlePress = useCallback(async () => {
@@ -85,7 +35,7 @@ const OpenURLButton = ({ url, text }) => {
   return (
     <TouchableOpacity onPress={handlePress}>
       <Text
-        style={{ ...styles.paragraphText, textDecorationLine: "underline" }}
+        style={{ ...styles.paragraphText, textDecorationLine: "underline", textAlign: 'left' }}
       >
         {text}
       </Text>
@@ -94,20 +44,28 @@ const OpenURLButton = ({ url, text }) => {
 };
 
 export default class MainScreen extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      glowAnim: new Value(0),
-      breathAnim: new Value(0),
-      currentActives: 7583,
-      isMourning: false,
-    };
+  handleText = () => {
+    SendSMS.send({
+      //Message body
+      body: 'Please follow https://aboutreact.com',
+      //Recipients Number
+      recipients: ['8183029014'],
+      //An array of types that would trigger a "completed" response when using android
+      successTypes: ['sent', 'queued']
+    }, (completed, cancelled, error) => {
+      if (completed) {
+        console.log('SMS Sent Completed');
+      } else if (cancelled) {
+        console.log('SMS Sent Cancelled');
+      } else if (error) {
+        console.log('Some error occured');
+      }
+    });
   }
 
   render() {
     const { navigation } = this.props;
-    const { glowAnim, currentActives } = this.state;
     return (
       <ScrollView
         style={styles.container}
@@ -132,30 +90,41 @@ export default class MainScreen extends React.Component {
           <View style={{ width: 50 }} />
         </View>
         <View style={styles.textContainer}>
-          {information.map((text) => (
-            <View
-              style={styles.sectionContainer}
-              key={"idSection" + text.section}
-            >
-              <Text style={styles.headText}>{text.title}</Text>
-              {text.body.map((paragraph) => (
-                <View key={"idParagraphSection" + paragraph.paragraph}>
-                  {text.type === "url" ? (
-                    <OpenURLButton
-                      url={supportedURL}
-                      text={paragraph.description}
-                    />
-                  ) : (
-                      <Text style={styles.paragraphText}>
-                        {paragraph.description}
-                      </Text>
-                    )}
-                </View>
-              ))}
-            </View>
-          ))}
+          <View style={styles.sectionContainer}>
+            <Text style={styles.headText}>Why We Made Ember</Text>
+            <Text style={styles.paragraphText}>
+              On May 25th, 2020, George Floyd was killed by a police officer in Minneapolis,
+              Min- nesota, causing millions of people to grieve over this injustice. At some point
+              in the process of grieving comes a time for reflection and solace necessary for leading
+              change. Ember hopes to provide such a space in these dire times.
+              </Text>
+            <Text style={styles.paragraphText}>
+              Say their names. George Floyd's death was unfortunately not the only instance of police brutality and
+              manifestation of systemic racism: Breonna Taylor. Ahmaud Arbery. Stephon Clark. Alton Sterling. Terence Crutcher.
+              Philandro Castile. Antonio Martin. Walter Scott. Christian Taylor. Michael Brown. Trayvon Martin. Dontre Hamilton.
+              Eric Garner. John Crawford III. Samuel Dubose. Sandra Bland. Ezell Ford. Dante Parker. Tanisha Anderson. Akai Gurley.
+              Tamir Rice. Rumain Brisbon. Laquan McDonald. Jermaine Reed. Tony Robinson. Phillip White . . .
+            </Text>
+          </View>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.headText}>How It Works</Text>
+            <Text style={styles.paragraphText}>1) Hold the light to ignite your ember.</Text>
+            <Text style={styles.paragraphText}>2) The number indicates how many others are remembering with you.</Text>
+          </View>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.headText}>Prompts for Reflection and Change</Text>
+            <Text style={styles.paragraphText}>In what ways have I engaged in rhetoric that promotes othering or stereotyping of Black people?</Text>
+            <Text style={styles.paragraphText}>What can I do to better educate myself on the historical context of race in the country and community I exist in?</Text>
+            <Text style={styles.paragraphText}>How do I feel when I consider my own internal racism and biases?</Text>
+          </View>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.headText}>How You Can Help</Text>
+            <OpenURLButton url={"https://blacklivesmatter.com"} text={"Black Lives Matter website"} />
+            <OpenURLButton url={"https://youtu.be/bCgLa25fDHM"} text={"Youtube stream to generate funds through ad revenues"} />
+            <OpenURLButton url={"https://blacklivesmatters.carrd.co/"} text={"Compilation of petitions, donations, and protesting resources"} />
+          </View>
         </View>
-      </ScrollView>
+      </ScrollView >
     );
   }
 }
