@@ -41,8 +41,8 @@ export default class MainScreen extends React.Component {
   }
 
   componentDidMount = async () => {
-    AppState.addEventListener("change", this.handleAppStateChange);
-    console.log("welcome back");
+    AppState.addEventListener('change', this.handleAppStateChange);
+    console.log('welcome back');
     await this.fetchAndSetCurrent();
     fetchLives().then((lives) => {
       if (lives !== null) {
@@ -52,13 +52,17 @@ export default class MainScreen extends React.Component {
   };
 
   componentWillUnmount() {
-    AppState.removeEventListener("change", this.handleAppStateChange);
+    AppState.removeEventListener('change', this.handleAppStateChange);
+    console.log('unmounting')
   }
 
   handleAppStateChange = async (nextAppState) => {
+    console.log(this.state.isMourning)
     const { isMourning } = this.state;
-    if (nextAppState === "inactive" && isMourning) {
+    if (nextAppState === 'inactive' && isMourning) {
       await this.fetchAndSetCurrent(mourningStep.stopped);
+    } else if (nextAppState === 'active') {
+      console.log("Returning to app")
     }
   };
 
@@ -140,34 +144,37 @@ export default class MainScreen extends React.Component {
   };
 
   handleRelease = async () => {
-    const { glowAnim, breathAnim, backgroundAnim, isMourning } = this.state;
-    await parallel([
-      timing(glowAnim, {
-        toValue: 0,
-        duration: 5000,
-        easing: Easing.elastic(1),
-      }),
-      timing(breathAnim, {
-        toValue: 0,
-        duration: 5000,
-        easing: Easing.elastic(1),
-      }),
-      timing(backgroundAnim, {
-        toValue: 0,
-        duration: 3000,
-        easing: Easing.elastic(0.5),
-      }),
-    ]).start(async ({ finished }) => {
-      if (finished && isMourning) {
-        this.setState({
-          currentName: "George Floyd",
-          currentLink:
-            "https://news.sky.com/story/who-was-george-floyd-the-gentle-giant-who-loved-his-hugs-11997206",
-          isMorning: false,
-        });
-        await this.fetchAndSetCurrent(mourningStep.stopped);
-      }
-    });
+    const { glowAnim, breathAnim, backgroundAnim } = this.state;
+    await
+      sequence([
+        parallel([
+          timing(glowAnim, {
+            toValue: 0,
+            duration: 5000,
+            easing: Easing.elastic(1),
+          }),
+          timing(backgroundAnim, {
+            toValue: 0,
+            duration: 3000,
+            easing: Easing.elastic(0.5),
+          }),
+        ]),
+        timing(breathAnim, {
+          toValue: 0,
+          duration: 5000,
+          easing: Easing.elastic(1),
+        }),
+      ]).start(async ({ finished }) => {
+        if (finished && this.state.isMourning) { // Do not destructure this state variable
+          this.setState({
+            currentName: "George Floyd",
+            currentLink:
+              "https://news.sky.com/story/who-was-george-floyd-the-gentle-giant-who-loved-his-hugs-11997206",
+            isMorning: false,
+          });
+          await this.fetchAndSetCurrent(mourningStep.stopped);
+        }
+      });
   };
 
   breathOut = async () => {
@@ -263,7 +270,7 @@ export default class MainScreen extends React.Component {
           </TouchableOpacity>
         </Animated.View>
         <Animated.View style={{ ...styles.topContainer, opacity: glowAnim }}>
-          <Text style={styles.titleText}>Remembering with you</Text>
+          <Text style={styles.titleText}></Text>
           <Text style={styles.numberText}>{currentActives}</Text>
         </Animated.View>
         <Animated.View style={{ ...styles.nameContainer, opacity: breathAnim }}>
