@@ -13,8 +13,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import Communications from 'react-native-communications';
-import SendSMS from 'react-native-sms';
 
 const backButton = require(".././assets/backButton.png");
 
@@ -44,25 +42,6 @@ const OpenURLButton = ({ url, text }) => {
 };
 
 export default class MainScreen extends React.Component {
-
-  handleText = () => {
-    SendSMS.send({
-      //Message body
-      body: 'Please follow https://aboutreact.com',
-      //Recipients Number
-      recipients: ['8183029014'],
-      //An array of types that would trigger a "completed" response when using android
-      successTypes: ['sent', 'queued']
-    }, (completed, cancelled, error) => {
-      if (completed) {
-        console.log('SMS Sent Completed');
-      } else if (cancelled) {
-        console.log('SMS Sent Cancelled');
-      } else if (error) {
-        console.log('Some error occured');
-      }
-    });
-  }
 
   render() {
     const { navigation } = this.props;
