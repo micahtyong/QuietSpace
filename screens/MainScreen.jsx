@@ -31,6 +31,7 @@ export default class MainScreen extends React.Component {
       breathAnim: new Value(0),
       backgroundAnim: new Value(0),
       currentActives: 7583,
+      totalUses: 10000,
       lives: [],
       isMourning: false,
       currentName: "George Floyd",
@@ -69,7 +70,8 @@ export default class MainScreen extends React.Component {
           .then((response) => {
             if (response !== null) {
               console.log("Updating", response);
-              this.setState({ currentActives: response });
+              const { current, total } = response;
+              this.setState({ currentActives: current, totalUses: total });
             }
           })
           .catch((err) => console.log(err));
@@ -78,10 +80,15 @@ export default class MainScreen extends React.Component {
         fetchCurrent()
           .then((response) => {
             if (response !== null) {
-              mourn(response + 1).then((response) => {
+              const { current, total } = response;
+              mourn(current + 1, total + 1).then((response) => {
                 console.log("Mourning now,", response);
                 this.setState(
-                  { currentActives: response, isMourning: true },
+                  {
+                    currentActives: current + 1,
+                    totalUses: total + 1,
+                    isMourning: true,
+                  },
                   this.updateCurrent
                 );
               });
@@ -93,9 +100,14 @@ export default class MainScreen extends React.Component {
         fetchCurrent()
           .then((response) => {
             if (response !== null) {
-              mourn(response - 1).then((response) => {
+              const { current, total } = response;
+              mourn(current - 1, total).then((response) => {
                 console.log("No longer mourning,", response);
-                this.setState({ currentActives: response, isMourning: false });
+                this.setState({
+                  currentActives: response,
+                  totalUses: total,
+                  isMourning: false,
+                });
               });
             }
           })
