@@ -33,7 +33,11 @@ const OpenURLButton = ({ url, text }) => {
   return (
     <TouchableOpacity onPress={handlePress}>
       <Text
-        style={{ ...styles.paragraphText, textDecorationLine: "underline", textAlign: 'left' }}
+        style={{
+          ...styles.paragraphText,
+          textDecorationLine: "underline",
+          textAlign: "left",
+        }}
       >
         {text}
       </Text>
@@ -42,7 +46,6 @@ const OpenURLButton = ({ url, text }) => {
 };
 
 export default class MainScreen extends React.Component {
-
   render() {
     const { navigation } = this.props;
     return (
@@ -72,38 +75,78 @@ export default class MainScreen extends React.Component {
           <View style={styles.sectionContainer}>
             <Text style={styles.headText}>Why We Made Ember</Text>
             <Text style={styles.paragraphText}>
-              On May 25th, 2020, George Floyd was killed by a police officer in Minneapolis,
-              Min- nesota, causing millions of people to grieve over this injustice. At some point
-              in the process of grieving comes a time for reflection and solace necessary for leading
-              change. Ember hopes to provide such a space in these dire times.
-              </Text>
+              On May 25th, 2020, George Floyd was killed by a police officer in
+              Minneapolis, Minnesota, causing millions of people to grieve over
+              this injustice. At some point in the process of grieving comes a
+              time for reflection and solace necessary for leading change. Ember
+              hopes to provide such a space in these dire times.
+            </Text>
             <Text style={styles.paragraphText}>
-              Say their names. George Floyd's death was unfortunately not the only instance of police brutality and
-              manifestation of systemic racism: Breonna Taylor. Ahmaud Arbery. Stephon Clark. Alton Sterling. Terence Crutcher.
-              Philandro Castile. Antonio Martin. Walter Scott. Christian Taylor. Michael Brown. Trayvon Martin. Dontre Hamilton.
-              Eric Garner. John Crawford III. Samuel Dubose. Sandra Bland. Ezell Ford. Dante Parker. Tanisha Anderson. Akai Gurley.
-              Tamir Rice. Rumain Brisbon. Laquan McDonald. Jermaine Reed. Tony Robinson. Phillip White . . .
+              Say their names. George Floyd's death was unfortunately not the
+              only instance of police brutality and manifestation of systemic
+              racism: Breonna Taylor. Ahmaud Arbery. Stephon Clark. Alton
+              Sterling. Terence Crutcher. Philandro Castile. Antonio Martin.
+              Walter Scott. Christian Taylor. Michael Brown. Trayvon Martin.
+              Dontre Hamilton. Eric Garner. John Crawford III. Samuel Dubose.
+              Sandra Bland. Ezell Ford. Dante Parker. Tanisha Anderson. Akai
+              Gurley. Tamir Rice. Rumain Brisbon. Laquan McDonald. Jermaine
+              Reed. Tony Robinson. Phillip White. And countless others. Don't
+              let their deaths go in vain.
+            </Text>
+            <Text style={styles.paragraphText}>
+              We created Ember in response to this. It hopes to provide
+              something a little less cluttered, and a little more focused on
+              who we’ve lost.
             </Text>
           </View>
           <View style={styles.sectionContainer}>
             <Text style={styles.headText}>How It Works</Text>
-            <Text style={styles.paragraphText}>1) Hold the light to ignite your ember.</Text>
-            <Text style={styles.paragraphText}>2) The number indicates how many others are remembering with you.</Text>
+            <Text style={styles.paragraphText}>
+              1) Hold the light to ignite your ember.
+            </Text>
+            <Text style={styles.paragraphText}>
+              2) The number indicates how many others are remembering with you.
+            </Text>
+            <Text style={styles.paragraphText}>
+              3) The name indicates one of the many we've lost. Click on their
+              name to learn more about their life.
+            </Text>
           </View>
           <View style={styles.sectionContainer}>
-            <Text style={styles.headText}>Prompts for Reflection and Change</Text>
-            <Text style={styles.paragraphText}>In what ways have I engaged in rhetoric that promotes othering or stereotyping of Black people?</Text>
-            <Text style={styles.paragraphText}>What can I do to better educate myself on the historical context of race in the country and community I exist in?</Text>
-            <Text style={styles.paragraphText}>How do I feel when I consider my own internal racism and biases?</Text>
+            <Text style={styles.headText}>
+              Prompts for Reflection and Change
+            </Text>
+            <Text style={styles.paragraphText}>
+              In what ways have I engaged in rhetoric that promotes othering or
+              stereotyping of Black people?
+            </Text>
+            <Text style={styles.paragraphText}>
+              What can I do to better educate myself on the historical context
+              of race in the country and community I exist in?
+            </Text>
+            <Text style={styles.paragraphText}>
+              How do I feel when I consider my own internal racism and biases?
+            </Text>
           </View>
           <View style={styles.sectionContainer}>
             <Text style={styles.headText}>How You Can Help</Text>
-            <OpenURLButton url={"https://blacklivesmatter.com"} text={"Black Lives Matter website"} />
-            <OpenURLButton url={"https://youtu.be/bCgLa25fDHM"} text={"Youtube stream to generate funds through ad revenues"} />
-            <OpenURLButton url={"https://blacklivesmatters.carrd.co/"} text={"Compilation of petitions, donations, and protesting resources"} />
+            <OpenURLButton
+              url={"https://blacklivesmatter.com"}
+              text={"Black Lives Matter website"}
+            />
+            <OpenURLButton
+              url={"https://youtu.be/bCgLa25fDHM"}
+              text={"Youtube stream to generate funds through ad revenues"}
+            />
+            <OpenURLButton
+              url={"https://blacklivesmatters.carrd.co/"}
+              text={
+                "Compilation of petitions, donations, and protesting resources"
+              }
+            />
           </View>
         </View>
-      </ScrollView >
+      </ScrollView>
     );
   }
 }
@@ -163,7 +206,6 @@ const styles = StyleSheet.create({
     color: "#CCCCCC",
     marginBottom: 16,
     paddingHorizontal: wp(5),
-    textAlign: "justify",
     fontFamily: "Lora",
   },
 });
