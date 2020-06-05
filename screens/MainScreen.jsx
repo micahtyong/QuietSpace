@@ -18,7 +18,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-const { Value, timing, sequence, loop, parallel } = Animated;
+const { Value, timing, parallel } = Animated;
 const glow = require(".././assets/glow.png");
 const info = require(".././assets/infoIcon.png");
 
