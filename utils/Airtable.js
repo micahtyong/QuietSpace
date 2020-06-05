@@ -8,7 +8,7 @@ export const fetchLives = () => {
     const lives = [];
     base("Lives")
       .select({
-        maxRecords: 20,
+        maxRecords: 30,
         view: "Grid view",
       })
       .eachPage(

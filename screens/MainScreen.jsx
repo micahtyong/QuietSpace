@@ -193,9 +193,10 @@ export default class MainScreen extends React.Component {
 
   changeName = () => {
     const { lives } = this.state;
+    const index = Math.floor(Math.random() * lives.length);
     this.setState({
-      currentName: lives[Math.floor(Math.random() * lives.length)][0],
-      currentLink: lives[Math.floor(Math.random() * lives.length)][1],
+      currentName: lives[index][0],
+      currentLink: lives[index][1],
     });
   };
 
