@@ -9,8 +9,6 @@ import {
   ScrollView,
   Linking,
 } from "react-native";
-import { fetchCurrent, mourn } from ".././utils/Airtable";
-import { mourningStep } from ".././utils/Enumerations";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,

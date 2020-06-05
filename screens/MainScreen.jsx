@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,8 +9,8 @@ import {
   Easing,
   Image,
   AppState,
+  Linking,
 } from "react-native";
-import { Icon } from "react-native-elements";
 import { fetchCurrent, fetchLives, mourn } from ".././utils/Airtable";
 import { mourningStep } from ".././utils/Enumerations";
 import {
@@ -34,6 +34,8 @@ export default class MainScreen extends React.Component {
       lives: [],
       isMourning: false,
       currentName: "George Floyd",
+      currentLink:
+        "https://news.sky.com/story/who-was-george-floyd-the-gentle-giant-who-loved-his-hugs-11997206",
       wasCounted: false,
     };
   }
@@ -44,7 +46,6 @@ export default class MainScreen extends React.Component {
     await this.fetchAndSetCurrent();
     fetchLives().then((lives) => {
       if (lives !== null) {
-        // console.log("Here are the lives lost", lives);
         this.setState({ lives });
       }
     });
@@ -158,8 +159,12 @@ export default class MainScreen extends React.Component {
       }),
     ]).start(async ({ finished }) => {
       if (finished && isMourning) {
-        // Do not destructure this.state.isMourning. Value was updated in middle of func call.
-        this.setState({ currentName: "George Floyd", isMorning: false });
+        this.setState({
+          currentName: "George Floyd",
+          currentLink:
+            "https://news.sky.com/story/who-was-george-floyd-the-gentle-giant-who-loved-his-hugs-11997206",
+          isMorning: false,
+        });
         await this.fetchAndSetCurrent(mourningStep.stopped);
       }
     });
@@ -189,7 +194,8 @@ export default class MainScreen extends React.Component {
   changeName = () => {
     const { lives } = this.state;
     this.setState({
-      currentName: lives[Math.floor(Math.random() * lives.length)],
+      currentName: lives[Math.floor(Math.random() * lives.length)][0],
+      currentLink: lives[Math.floor(Math.random() * lives.length)][1],
     });
   };
 
@@ -201,7 +207,32 @@ export default class MainScreen extends React.Component {
       backgroundAnim,
       currentActives,
       currentName,
+      currentLink,
     } = this.state;
+    const OpenURLButton = ({ url, text }) => {
+      const handlePress = useCallback(async () => {
+        // Checking if the link is supported for links with custom URL scheme.
+        const supported = await Linking.canOpenURL(url);
+
+        if (supported) {
+          // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+          // by some browser in the mobile
+          await Linking.openURL(url);
+        } else {
+          Alert.alert(`Don't know how to open this URL: ${url}`);
+        }
+      }, [url]);
+
+      return (
+        <TouchableOpacity onPress={handlePress}>
+          <Text
+            style={{ ...styles.titleText, textDecorationLine: "underline" }}
+          >
+            {text}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
     return (
       <Animated.View
         style={{
@@ -236,7 +267,8 @@ export default class MainScreen extends React.Component {
         </Animated.View>
         <Animated.View style={{ ...styles.nameContainer, opacity: breathAnim }}>
           <Text style={styles.titleText}>In loving memory of</Text>
-          <Text style={styles.titleText}>{`— ${currentName} —`}</Text>
+          <OpenURLButton url={currentLink} text={`— ${currentName} —`} />
+          {/* <Text style={styles.titleText}>{`— ${currentName} —`}</Text> */}
         </Animated.View>
         <View style={styles.bottomContainer}>
           <TouchableWithoutFeedback

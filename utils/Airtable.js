@@ -14,8 +14,10 @@ export const fetchLives = () => {
       .eachPage(
         function page(records, fetchNextPage) {
           records.forEach(function (record) {
-            lives.push(record.get("Name"));
-            console.log("Retrieved", record.get("Name"));
+            if (record.get("Include")) {
+              lives.push([record.get("Name"), record.get("Life")]);
+              console.log("Retrieved", record.get("Name"), record.get("Life"));
+            }
           });
           fetchNextPage();
         },
