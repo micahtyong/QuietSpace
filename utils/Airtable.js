@@ -16,7 +16,6 @@ export const fetchLives = () => {
           records.forEach(function (record) {
             if (record.get("Include")) {
               lives.push([record.get("Name"), record.get("Life")]);
-              console.log("Retrieved", record.get("Name"), record.get("Life"));
             }
           });
           fetchNextPage();
@@ -35,15 +34,18 @@ export const fetchCurrent = () => {
   return new Promise((resolve, reject) => {
     base("BLM").find("recWVCnlxDRFfUxMs", function (err, record) {
       if (err) {
-        console.error(err);
         reject(err);
       }
-      resolve(record["fields"]["Currently"]);
+      const stats = {
+        current: record.get("Currently"),
+        total: record.get("Total"),
+      };
+      resolve(stats);
     });
   });
 };
 
-export const mourn = (newAmount) => {
+export const mourn = (newCurrent, newTotal) => {
   return new Promise((resolve, reject) => {
     base("BLM").update(
       [
@@ -51,20 +53,17 @@ export const mourn = (newAmount) => {
           id: "recWVCnlxDRFfUxMs",
           fields: {
             Name: "BLM",
-            Currently: newAmount,
-            Total: newAmount + 1,
+            Currently: newCurrent,
+            Total: newTotal,
           },
         },
       ],
       function (err, records) {
         if (err) {
-          console.error(err);
           reject(err);
         }
-        records.forEach(function (record) {
-          console.log(record.get("Currently"));
-        });
-        resolve(newAmount);
+        records.forEach(function (record) {});
+        resolve(newCurrent);
       }
     );
   });
