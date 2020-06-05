@@ -43,7 +43,6 @@ export default class MainScreen extends React.Component {
 
   componentDidMount = async () => {
     AppState.addEventListener('change', this.handleAppStateChange);
-    console.log('welcome back');
     await this.fetchAndSetCurrent();
     fetchLives().then((lives) => {
       if (lives !== null) {
@@ -54,16 +53,13 @@ export default class MainScreen extends React.Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
-    console.log('unmounting')
   }
 
   handleAppStateChange = async (nextAppState) => {
-    console.log(this.state.isMourning)
     const { isMourning } = this.state;
     if (nextAppState === 'inactive' && isMourning) {
       await this.fetchAndSetCurrent(mourningStep.stopped);
     } else if (nextAppState === 'active') {
-      console.log("Returning to app")
     }
   };
 
@@ -73,7 +69,6 @@ export default class MainScreen extends React.Component {
         fetchCurrent()
           .then((response) => {
             if (response !== null) {
-              console.log("Updating", response);
               const { current, total } = response;
               this.setState({ currentActives: current, totalUses: total });
             }
@@ -86,7 +81,6 @@ export default class MainScreen extends React.Component {
             if (response !== null) {
               const { current, total } = response;
               mourn(current + 1, total + 1).then((response) => {
-                console.log("Mourning now,", response);
                 this.setState(
                   {
                     currentActives: current + 1,
@@ -106,7 +100,6 @@ export default class MainScreen extends React.Component {
             if (response !== null) {
               const { current, total } = response;
               mourn(current - 1, total).then((response) => {
-                console.log("No longer mourning,", response);
                 this.setState({
                   currentActives: response,
                   totalUses: total,
