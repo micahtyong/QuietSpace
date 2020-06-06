@@ -1,18 +1,17 @@
 {
   "expo": {
-    "name": "quiet-space",
-    "slug": "quiet-space",
+    "name": "ember",
+    "slug": "ember",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/emberIcon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -22,7 +21,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.micahtyong.Ember"
     }
   }
 }
