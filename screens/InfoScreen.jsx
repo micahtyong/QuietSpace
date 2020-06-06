@@ -96,7 +96,7 @@ export default class MainScreen extends React.Component {
             <Text style={styles.paragraphText}>
               We created Ember in response to this. It hopes to provide
               something a little less cluttered, and a little more focused on
-              who we’ve lost due to a system that us.
+              who we’ve lost due to a system that fails us.
             </Text>
           </View>
           <View style={styles.sectionContainer}>
