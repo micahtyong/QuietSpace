@@ -17,6 +17,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import SmallEmber from "../SmallEmber";
 
 const { Value, timing, parallel, sequence } = Animated;
 const glow = require(".././assets/glow.png");
@@ -172,9 +173,6 @@ export default class MainScreen extends React.Component {
       ]).start(async ({ finished }) => {
         if (finished && this.state.isMourning) { // Do not destructure this state variable
           this.setState({
-            currentName: "George Floyd",
-            currentLink:
-              "https://news.sky.com/story/who-was-george-floyd-the-gentle-giant-who-loved-his-hugs-11997206",
             isMorning: false,
           });
           await this.fetchAndSetCurrent(mourningStep.stopped);
@@ -256,6 +254,9 @@ export default class MainScreen extends React.Component {
           }),
         }}
       >
+        <SmallEmber position={{ x: wp(25), y: hp(65) }} opacity={0.25} />
+        <SmallEmber position={{ x: wp(65), y: hp(35) }} opacity={0.25} />
+        <SmallEmber position={{ x: wp(80), y: hp(75) }} opacity={0.25} />
         <Animated.View
           style={{
             ...styles.infoContainer,
@@ -382,4 +383,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  starOne: {
+    position: 'absolute',
+    opacity: 0.35,
+    width: 25,
+    height: 25,
+    top: hp(35),
+    left: 80,
+  }
 });

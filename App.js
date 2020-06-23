@@ -1,4 +1,5 @@
 import React from "react";
+import { AsyncStorage } from 'react-native';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Asset } from "expo-asset";
 import "react-native-gesture-handler";

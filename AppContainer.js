@@ -8,9 +8,10 @@ import InfoScreen from "./screens/InfoScreen";
 const Stack = createStackNavigator();
 
 export default function AppContainer() {
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Main' headerMode={false}>
+      <Stack.Navigator initialRouteName={MainScreen} headerMode={false} mode="modal">
         <Stack.Screen name='Main' component={MainScreen} />
         <Stack.Screen name='Info' component={InfoScreen} />
       </Stack.Navigator>

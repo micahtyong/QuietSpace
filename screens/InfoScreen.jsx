@@ -14,7 +14,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-const backButton = require(".././assets/backButton.png");
+const closeButton = require(".././assets/closeButton.png");
 
 const OpenURLButton = ({ url, text }) => {
   const handlePress = useCallback(async () => {
@@ -57,19 +57,19 @@ export default class MainScreen extends React.Component {
         }}
       >
         <View style={styles.topNavigationContainer}>
+          <View style={{ width: 50 }} />
+          <Text style={styles.screenTitleText}>About Ember</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("Main");
             }}
           >
             <Image
-              source={backButton}
+              source={closeButton}
               style={styles.backButtonImage}
               resizeMode='contain'
             />
           </TouchableOpacity>
-          <Text style={styles.screenTitleText}>About Ember</Text>
-          <View style={{ width: 50 }} />
         </View>
         <View style={styles.textContainer}>
           <View style={styles.sectionContainer}>
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: hp(7.5),
-    paddingHorizontal: wp(7.5),
+    paddingHorizontal: wp(6),
   },
   backButtonImage: {
     alignItems: "center",
